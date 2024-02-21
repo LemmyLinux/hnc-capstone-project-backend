@@ -1,11 +1,19 @@
-package model;
+package es.carlos3.rocamora.hernandez.pfcbackend.model;
+
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "lesson")
 public class Lesson {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
+    @Column(name = "subject")
     private String subject;
+    @ElementCollection
     private List<String> comments;
 
     public Lesson(int id, String subject) {

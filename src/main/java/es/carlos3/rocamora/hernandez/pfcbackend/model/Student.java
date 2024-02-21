@@ -1,18 +1,28 @@
-package model;
+package es.carlos3.rocamora.hernandez.pfcbackend.model;
+
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "student")
 public class Student {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
+    @Column(name="mail", unique=true)
     private String mail;
+    @Column(name="name")
     private String name;
+    @Column(name="lastname")
     private String lastName;
+    @Column(name="phone", unique=true)
     private String phone;
+    @OneToMany(targetEntity = Booking.class)
     private List<Booking> bookings;
 
-    public Student(long id, String mail, String name, String lastName, String phone) {
-        this.id = id;
+    public Student(String mail, String name, String lastName, String phone) {
         this.mail = mail;
         this.name = name;
         this.lastName = lastName;

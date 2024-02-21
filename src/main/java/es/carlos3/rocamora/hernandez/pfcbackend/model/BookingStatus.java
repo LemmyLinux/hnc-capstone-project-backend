@@ -1,4 +1,4 @@
-package model;
+package es.carlos3.rocamora.hernandez.pfcbackend.model;
 
 import java.util.List;
 

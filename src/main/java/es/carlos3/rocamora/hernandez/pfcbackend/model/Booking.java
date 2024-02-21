@@ -1,25 +1,36 @@
-package model;
+package es.carlos3.rocamora.hernandez.pfcbackend.model;
+
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
 
+@Entity
+@Table(name = "booking")
 public class Booking {
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
+    @Column(name = "creation_date")
     private LocalDateTime date;
+    @Column(name = "start")
     private LocalDateTime start;
+    @Column(name = "end")
     private LocalDateTime end;
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
+    @OneToOne
+    private Lesson lesson;
 
-    public Booking(long id, LocalDateTime date, LocalDateTime start, LocalDateTime end, BookingStatus status) {
-        this.id = id;
+    @Transient
+    private long durationInMinutes;
+
+    public Booking(LocalDateTime date, LocalDateTime start, LocalDateTime end, BookingStatus status) {
         this.date = date;
         this.start = start;
         this.end = end;
         this.status = status;
-    }
-
-    public Booking(long id, LocalDateTime start, LocalDateTime end) {
-        this(id, LocalDateTime.now(), start, end, BookingStatus.AVAILABLE);
+        this.durationInMinutes = ChronoUnit.MINUTES.between(start, end);
     }
 
     public long getId() {
@@ -60,5 +71,13 @@ public class Booking {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+
+    public long getDurationInMinutes() {
+        return durationInMinutes;
+    }
+
+    public void setDurationInMinutes(long durationInMinutes) {
+        this.durationInMinutes = durationInMinutes;
     }
 }
