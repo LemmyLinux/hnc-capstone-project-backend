@@ -16,10 +16,13 @@ public class Lesson {
     @ElementCollection
     private List<String> comments;
 
-    public Lesson(int id, String subject) {
-        this.id = id;
+    public Lesson(String subject, List<String> comments) {
         this.subject = subject;
-        this.comments = new ArrayList<String>();
+        this.comments = comments;
+    }
+
+    public Lesson(String subject) {
+        this(subject, new ArrayList<String>());
     }
 
     public long getId() {
