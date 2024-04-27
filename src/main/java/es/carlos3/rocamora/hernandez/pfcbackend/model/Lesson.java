@@ -1,5 +1,7 @@
 package es.carlos3.rocamora.hernandez.pfcbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -11,11 +13,18 @@ public class Lesson {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
+
+    @JsonProperty("subject")
     @Column(name = "subject")
     private String subject;
+
+    @JsonProperty("comments")
     @ElementCollection
     private List<String> comments;
 
+    public Lesson(){}
+
+    @JsonCreator
     public Lesson(String subject, List<String> comments) {
         this.subject = subject;
         this.comments = comments;

@@ -1,5 +1,7 @@
 package es.carlos3.rocamora.hernandez.pfcbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -13,20 +15,27 @@ public class Booking {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
+    @JsonProperty("date")
     @Column(name = "creation_date")
     private LocalDateTime date;
+    @JsonProperty("start")
     @Column(name = "start")
     private LocalDateTime start;
+    @JsonProperty("end")
     @Column(name = "end")
     private LocalDateTime end;
+    @JsonProperty("status")
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
+
+    @JsonProperty("lesson")
     @OneToOne(cascade = CascadeType.ALL)
     private Lesson lesson;
 
     @Transient
     private long durationInMinutes;
 
+    @JsonCreator
     public Booking(LocalDateTime date, LocalDateTime start, LocalDateTime end, BookingStatus status, Lesson lesson) {
         this.date = date;
         this.start = start;
@@ -35,6 +44,8 @@ public class Booking {
         this.lesson = lesson;
         this.durationInMinutes = ChronoUnit.MINUTES.between(start, end);
     }
+
+    public Booking(){}
 
     public Booking(LocalDateTime date, LocalDateTime start, LocalDateTime end, BookingStatus status) {
         this(date, start, end, status, null);

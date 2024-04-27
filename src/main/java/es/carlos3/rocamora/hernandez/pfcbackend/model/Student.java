@@ -22,6 +22,8 @@ public class Student {
     @OneToMany(targetEntity = Booking.class)
     private List<Booking> bookings;
 
+    public Student(){}
+
     public Student(String mail, String name, String lastName, String phone) {
         this.mail = mail;
         this.name = name;
