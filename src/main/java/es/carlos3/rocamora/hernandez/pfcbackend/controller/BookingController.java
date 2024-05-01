@@ -47,8 +47,10 @@ public class BookingController {
      */
     @PostMapping("/booking")
     Booking newBooking(@RequestBody Booking booking) {
-
-        return bookingRepository.save(booking);
+        System.out.println(booking);
+        Booking bookObj = bookingRepository.save(booking);
+        System.out.println(bookObj);
+        return bookObj;
     }
 
 }

@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.ToString;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table(name = "booking")
@@ -17,13 +19,13 @@ public class Booking {
     private long id;
     @JsonProperty("date")
     @Column(name = "creation_date")
-    private LocalDateTime date;
+    private Timestamp date;
     @JsonProperty("start")
     @Column(name = "start")
-    private LocalDateTime start;
+    private Timestamp start;
     @JsonProperty("end")
     @Column(name = "end")
-    private LocalDateTime end;
+    private Timestamp end;
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
@@ -36,18 +38,18 @@ public class Booking {
     private long durationInMinutes;
 
     @JsonCreator
-    public Booking(LocalDateTime date, LocalDateTime start, LocalDateTime end, BookingStatus status, Lesson lesson) {
+    public Booking(Timestamp date, Timestamp start, Timestamp end, BookingStatus status, Lesson lesson) {
         this.date = date;
         this.start = start;
         this.end = end;
         this.status = status;
         this.lesson = lesson;
-        this.durationInMinutes = ChronoUnit.MINUTES.between(start, end);
+        this.durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(end.getTime() - start.getTime());
     }
 
     public Booking(){}
 
-    public Booking(LocalDateTime date, LocalDateTime start, LocalDateTime end, BookingStatus status) {
+    public Booking(Timestamp date, Timestamp start, Timestamp end, BookingStatus status) {
         this(date, start, end, status, null);
     }
 
@@ -59,27 +61,27 @@ public class Booking {
         this.id = id;
     }
 
-    public LocalDateTime getDate() {
+    public Timestamp getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(Timestamp date) {
         this.date = date;
     }
 
-    public LocalDateTime getStart() {
+    public Timestamp getStart() {
         return start;
     }
 
-    public void setStart(LocalDateTime start) {
+    public void setStart(Timestamp start) {
         this.start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public Timestamp getEnd() {
         return end;
     }
 
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(Timestamp end) {
         this.end = end;
     }
 
