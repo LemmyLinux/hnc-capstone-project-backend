@@ -3,11 +3,10 @@ package es.carlos3.rocamora.hernandez.pfcbackend.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.ToString;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 
 @Entity
@@ -19,12 +18,15 @@ public class Booking {
     private long id;
     @JsonProperty("date")
     @Column(name = "creation_date")
+    @NotNull(message = "Debe especificar la fecha de creación.")
     private Timestamp date;
     @JsonProperty("start")
     @Column(name = "start")
+    @NotNull(message = "Debe especificar la fecha y hora de inicio.")
     private Timestamp start;
     @JsonProperty("end")
     @Column(name = "end")
+    @NotNull(message = "Debe especificar la fecha y hora de fin.")
     private Timestamp end;
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
@@ -32,6 +34,7 @@ public class Booking {
 
     @JsonProperty("lesson")
     @OneToOne(cascade = CascadeType.ALL)
+    @NotNull(message = "Debe especificar la clase.")
     private Lesson lesson;
 
     @Transient
@@ -99,5 +102,13 @@ public class Booking {
 
     public void setDurationInMinutes(long durationInMinutes) {
         this.durationInMinutes = durationInMinutes;
+    }
+
+    public Lesson getLesson() {
+        return lesson;
+    }
+
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
 }

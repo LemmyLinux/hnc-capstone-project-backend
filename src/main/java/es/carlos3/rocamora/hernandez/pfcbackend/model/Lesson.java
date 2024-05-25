@@ -3,6 +3,7 @@ package es.carlos3.rocamora.hernandez.pfcbackend.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,8 @@ public class Lesson {
     private long id;
 
     @JsonProperty("subject")
-    @Column(name = "subject")
+    @Column(name = "subject", unique=true)
+    @NotBlank(message = "Debe especificar un valor para la asignatura.")
     private String subject;
 
     @JsonProperty("comments")
