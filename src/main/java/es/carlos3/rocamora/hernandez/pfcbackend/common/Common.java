@@ -1,11 +1,9 @@
 package es.carlos3.rocamora.hernandez.pfcbackend.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import es.carlos3.rocamora.hernandez.pfcbackend.model.MessageError;
+import es.carlos3.rocamora.hernandez.pfcbackend.model.MessageJson;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
-import org.springframework.validation.BindingResult;
 
 public class Common {
     public final static String OK = "OK";
@@ -19,9 +17,9 @@ public class Common {
         }
     }
 
-    public static String parseToErrorMessage(String message) {
+    public static String parseToMessageJson(String message) {
         try {
-            return mapper.writeValueAsString(new MessageError(message));
+            return mapper.writeValueAsString(new MessageJson(message));
         } catch (Exception exception) {
             return message;
         }

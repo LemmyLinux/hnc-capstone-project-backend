@@ -59,10 +59,10 @@ public class BookingController {
         // Devolvemos la reserva una vez guardada en la base de datos. Este paso asigna un valor al atributo id.
         try {
             bookingRepository.save(booking);
-            return ResponseEntity.ok().body(Common.OK);
+            return ResponseEntity.ok().body(Common.parseToMessageJson(Common.OK));
         } catch (ConstraintViolationException exception) {
             return ResponseEntity.internalServerError().body(
-                    Common.parseToErrorMessage(Common.extractError(exception)));
+                    Common.parseToMessageJson(Common.extractError(exception)));
         }
     }
 
@@ -77,10 +77,10 @@ public class BookingController {
     ResponseEntity<String> updateBooking(@RequestBody @Valid Booking booking) {
         try {
             bookingRepository.save(booking);
-            return ResponseEntity.ok().body(Common.OK);
+            return ResponseEntity.ok().body(Common.parseToMessageJson(Common.OK));
         } catch (ConstraintViolationException exception) {
             return ResponseEntity.internalServerError().body(
-                    Common.parseToErrorMessage(Common.extractError(exception)));
+                    Common.parseToMessageJson(Common.extractError(exception)));
         }
     }
 
@@ -88,10 +88,10 @@ public class BookingController {
     ResponseEntity<String> deleteBooking(@RequestBody @Valid Booking booking) {
         try {
             bookingRepository.delete(booking);
-            return ResponseEntity.ok().body(Common.OK);
+            return ResponseEntity.ok().body(Common.parseToMessageJson(Common.OK));
         } catch (ConstraintViolationException exception) {
             return ResponseEntity.internalServerError().body(
-                    Common.parseToErrorMessage(Common.extractError(exception)));
+                    Common.parseToMessageJson(Common.extractError(exception)));
         }
     }
 }

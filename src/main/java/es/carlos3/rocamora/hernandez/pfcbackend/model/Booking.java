@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
 @Entity
 @Table(name = "booking")
-@ToString
 public class Booking {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -41,7 +39,12 @@ public class Booking {
     private long durationInMinutes;
 
     @JsonCreator
-    public Booking(Timestamp date, Timestamp start, Timestamp end, BookingStatus status, Lesson lesson) {
+    public Booking(
+            @JsonProperty("date") Timestamp date,
+            @JsonProperty("start") Timestamp start,
+            @JsonProperty("end") Timestamp end,
+            @JsonProperty("status") BookingStatus status,
+            @JsonProperty("lesson") Lesson lesson) {
         this.date = date;
         this.start = start;
         this.end = end;
@@ -51,10 +54,6 @@ public class Booking {
     }
 
     public Booking(){}
-
-    public Booking(Timestamp date, Timestamp start, Timestamp end, BookingStatus status) {
-        this(date, start, end, status, null);
-    }
 
     public long getId() {
         return id;

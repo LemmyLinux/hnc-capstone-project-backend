@@ -27,13 +27,12 @@ public class Lesson {
     public Lesson(){}
 
     @JsonCreator
-    public Lesson(String subject, List<String> comments) {
+    public Lesson(
+            @JsonProperty("subject") String subject,
+            @JsonProperty("comments") List<String> comments
+    ) {
         this.subject = subject;
         this.comments = comments;
-    }
-
-    public Lesson(String subject) {
-        this(subject, new ArrayList<String>());
     }
 
     public long getId() {
