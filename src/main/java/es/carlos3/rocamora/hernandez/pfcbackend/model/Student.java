@@ -1,82 +1,49 @@
 package es.carlos3.rocamora.hernandez.pfcbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "student")
 public class Student {
     @Id
+    @Column(name = "login_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
-    @Column(name="mail", unique=true)
-    private String mail;
     @Column(name="name")
     private String name;
     @Column(name="lastname")
     private String lastName;
     @Column(name="phone", unique=true)
     private String phone;
-    @OneToMany(targetEntity = Booking.class)
+    @OneToMany(targetEntity = Booking.class, cascade = CascadeType.ALL)
     private List<Booking> bookings;
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "login_id")
+    private Login login;
 
     public Student(){}
 
-    public Student(String mail, String name, String lastName, String phone) {
-        this.mail = mail;
+    @JsonCreator
+    public Student(
+            @JsonProperty("name") String name,
+            @JsonProperty("lastName") String lastName,
+            @JsonProperty("phone") String phone,
+            @JsonProperty("login") Login login
+    ) {
         this.name = name;
         this.lastName = lastName;
         this.phone = phone;
+        this.login = login;
         this.bookings = new ArrayList<>();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
     }
 }

@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "booking")
 public class Booking {
@@ -38,76 +42,29 @@ public class Booking {
     @Transient
     private long durationInMinutes;
 
+    @Transient
+    private long studentId;
+
+    @JsonProperty("userMail")
+    @Column(name = "user_mail")
+    private String userMail;
+
     @JsonCreator
     public Booking(
             @JsonProperty("date") Timestamp date,
             @JsonProperty("start") Timestamp start,
             @JsonProperty("end") Timestamp end,
             @JsonProperty("status") BookingStatus status,
-            @JsonProperty("lesson") Lesson lesson) {
+            @JsonProperty("lesson") Lesson lesson,
+            @JsonProperty("studentId") long studentId) {
         this.date = date;
         this.start = start;
         this.end = end;
         this.status = status;
         this.lesson = lesson;
         this.durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(end.getTime() - start.getTime());
+        this.studentId = studentId;
     }
 
     public Booking(){}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Timestamp getDate() {
-        return date;
-    }
-
-    public void setDate(Timestamp date) {
-        this.date = date;
-    }
-
-    public Timestamp getStart() {
-        return start;
-    }
-
-    public void setStart(Timestamp start) {
-        this.start = start;
-    }
-
-    public Timestamp getEnd() {
-        return end;
-    }
-
-    public void setEnd(Timestamp end) {
-        this.end = end;
-    }
-
-    public BookingStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BookingStatus status) {
-        this.status = status;
-    }
-
-    public long getDurationInMinutes() {
-        return durationInMinutes;
-    }
-
-    public void setDurationInMinutes(long durationInMinutes) {
-        this.durationInMinutes = durationInMinutes;
-    }
-
-    public Lesson getLesson() {
-        return lesson;
-    }
-
-    public void setLesson(Lesson lesson) {
-        this.lesson = lesson;
-    }
 }

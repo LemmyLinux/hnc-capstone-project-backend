@@ -2,14 +2,16 @@ package es.carlos3.rocamora.hernandez.pfcbackend.controller;
 
 import es.carlos3.rocamora.hernandez.pfcbackend.common.Common;
 import es.carlos3.rocamora.hernandez.pfcbackend.model.Booking;
+import es.carlos3.rocamora.hernandez.pfcbackend.model.Login;
+import es.carlos3.rocamora.hernandez.pfcbackend.model.Student;
 import es.carlos3.rocamora.hernandez.pfcbackend.repositories.BookingRepository;
+import es.carlos3.rocamora.hernandez.pfcbackend.repositories.StudentRepository;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,28 +22,23 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 public class BookingController {
     private final BookingRepository bookingRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public BookingController(BookingRepository bookingRepository) {
+    public BookingController(BookingRepository bookingRepository, StudentRepository studentRepository) {
         this.bookingRepository = bookingRepository;
+        this.studentRepository = studentRepository;
     }
 
-    /**
-     * Envía todas las Bookings cuya propiedad start se sitúa entre los parámetros start y end ambos incluídos.
-     * La propiedad @GetMapping configura el endpoint que recibirá las peticiones del cliente, en este caso /bookings
-     * @param start Fecha inicio
-     * @param end Fecha fin
-     * @return Listado de Bookings encontrados
-     */
-    @GetMapping("/bookings")
-    List<Booking> findBookings(@RequestParam(value = "start", required = false) LocalDateTime start,
-                               @RequestParam(value = "end", required = false) LocalDateTime end){
+    @PostMapping("/bookings")
+    List<Booking> findBookings(@RequestBody long user){
         try {
-            if (start != null && end != null) {
-                return (List<Booking>) bookingRepository.findByStartDateBetween(start, end);
+            Student student = studentRepository.findById(user);
+            if(student.getLogin().isAdmin()){
+                return (List<Booking>) bookingRepository.findAll();
+            } else {
+                return student.getBookings();
             }
-            // Si no se envían parámetros devuelvo todas las Bookings.
-            return (List<Booking>) bookingRepository.findAll();
         } catch (Exception exception) {
             return new ArrayList<>();
         }
@@ -58,7 +55,10 @@ public class BookingController {
     ResponseEntity<String> newBooking(@RequestBody @Valid Booking booking) {
         // Devolvemos la reserva una vez guardada en la base de datos. Este paso asigna un valor al atributo id.
         try {
-            bookingRepository.save(booking);
+            Student student = studentRepository.findById(booking.getStudentId());
+            booking.setUserMail(student.getLogin().getMail());
+            student.getBookings().add(booking);
+            studentRepository.save(student);
             return ResponseEntity.ok().body(Common.parseToMessageJson(Common.OK));
         } catch (ConstraintViolationException exception) {
             return ResponseEntity.internalServerError().body(

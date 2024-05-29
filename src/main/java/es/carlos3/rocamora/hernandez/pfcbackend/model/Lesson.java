@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "lesson")
 public class Lesson {
@@ -16,7 +20,7 @@ public class Lesson {
     private long id;
 
     @JsonProperty("subject")
-    @Column(name = "subject", unique=true)
+    @Column(name = "subject")
     @NotBlank(message = "Debe especificar un valor para la asignatura.")
     private String subject;
 
@@ -32,30 +36,6 @@ public class Lesson {
             @JsonProperty("comments") List<String> comments
     ) {
         this.subject = subject;
-        this.comments = comments;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public List<String> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<String> comments) {
         this.comments = comments;
     }
 }
