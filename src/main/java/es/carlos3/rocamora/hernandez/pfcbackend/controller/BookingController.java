@@ -30,15 +30,15 @@ public class BookingController {
         this.studentRepository = studentRepository;
     }
 
-    @PostMapping("/bookings")
-    List<Booking> findBookings(@RequestBody long user){
+    /**
+     * Envía todas las Bookings.
+     * La propiedad @GetMapping configura el endpoint que recibirá las peticiones del cliente, en este caso /bookings
+     * @return Listado de Bookings encontrados
+     */
+    @GetMapping("/bookings")
+    List<Booking> findBookings(){
         try {
-            Student student = studentRepository.findById(user);
-            if(student.getLogin().isAdmin()){
-                return (List<Booking>) bookingRepository.findAll();
-            } else {
-                return student.getBookings();
-            }
+            return (List<Booking>) bookingRepository.findAll();
         } catch (Exception exception) {
             return new ArrayList<>();
         }
@@ -77,17 +77,6 @@ public class BookingController {
     ResponseEntity<String> updateBooking(@RequestBody @Valid Booking booking) {
         try {
             bookingRepository.save(booking);
-            return ResponseEntity.ok().body(Common.parseToMessageJson(Common.OK));
-        } catch (ConstraintViolationException exception) {
-            return ResponseEntity.internalServerError().body(
-                    Common.parseToMessageJson(Common.extractError(exception)));
-        }
-    }
-
-    @DeleteMapping("/booking")
-    ResponseEntity<String> deleteBooking(@RequestBody @Valid Booking booking) {
-        try {
-            bookingRepository.delete(booking);
             return ResponseEntity.ok().body(Common.parseToMessageJson(Common.OK));
         } catch (ConstraintViolationException exception) {
             return ResponseEntity.internalServerError().body(

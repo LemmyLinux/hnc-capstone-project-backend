@@ -12,9 +12,6 @@ import java.util.List;
  * Repositorio de estudiantes. Esta clase gestiona los Students con la base de datos.
  */
 public interface StudentRepository extends CrudRepository<Student, Long> {
-    public List<Booking> findBookingsById(long id);
-
     public Student findById(long id);
 
-    public Login findLoginById(long id);
 }

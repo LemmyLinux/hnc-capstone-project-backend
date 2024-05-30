@@ -5,7 +5,7 @@ My back-end Capstone project for Carlos III Web Application Development HNC.
 
 The recomended software version for this project is:
 
-`java JDK 21`
+`java JDK 17`
 
 `IntelliJ IDEA`
 

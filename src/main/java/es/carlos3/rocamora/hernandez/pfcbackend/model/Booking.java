@@ -56,7 +56,8 @@ public class Booking {
             @JsonProperty("end") Timestamp end,
             @JsonProperty("status") BookingStatus status,
             @JsonProperty("lesson") Lesson lesson,
-            @JsonProperty("studentId") long studentId) {
+            @JsonProperty("studentId") long studentId,
+            @JsonProperty("userMail") String userMail) {
         this.date = date;
         this.start = start;
         this.end = end;
@@ -64,6 +65,7 @@ public class Booking {
         this.lesson = lesson;
         this.durationInMinutes = TimeUnit.MILLISECONDS.toMinutes(end.getTime() - start.getTime());
         this.studentId = studentId;
+        this.userMail = userMail;
     }
 
     public Booking(){}
